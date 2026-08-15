@@ -1,0 +1,813 @@
+{
+  "name": "WF3 - Sales Rep Assignment",
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -16,
+        32
+      ],
+      "id": "f141fec5-f479-431d-b19a-03b8c78b9e50",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "leadID",
+              "lookupValue": "={{ $json.leadID }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        -160
+      ],
+      "id": "de74e54d-cd96-4415-9e47-ca9361216871",
+      "name": "Get Lead Details",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6HvNQogqPaZpRFlt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sortFieldsUi": {
+          "sortField": [
+            {
+              "fieldName": "activeLeadCount"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.sort",
+      "typeVersion": 1,
+      "position": [
+        496,
+        144
+      ],
+      "id": "5fdd2931-fd9a-4b1c-ae5a-83c2101fe02c",
+      "name": "Sort"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        704,
+        0
+      ],
+      "id": "456e8c43-bdd3-44fd-8e0f-8c716d8a29d3",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "df40d87f-045e-4da8-b510-674a9c34e13c",
+              "name": "repID",
+              "value": "={{ $json.repID }}",
+              "type": "string"
+            },
+            {
+              "id": "17e90c8f-96b3-4228-8097-a51a6519d35c",
+              "name": "repName",
+              "value": "={{ $json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "6bcc13b0-2673-4a73-9c24-ce875c4127ef",
+              "name": "repEmail",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "c3e60cb2-6d30-4e54-890c-485f186c35e7",
+              "name": "activeLeadCount",
+              "value": "={{ $json.activeLeadCount }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        896,
+        128
+      ],
+      "id": "4a7ee0fc-4d48-4c49-a198-d7dd2fe6a81c",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 183260080,
+          "mode": "list",
+          "cachedResultName": "Reps",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit#gid=183260080"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        224,
+        144
+      ],
+      "id": "708005a9-27eb-402a-8e44-9b4bdc2be478",
+      "name": "Get Reps",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6HvNQogqPaZpRFlt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        496,
+        -144
+      ],
+      "id": "1d3acc74-fe19-4473-b8cc-0d6a0c6c5a6b",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7dff1dd7-1201-4887-93e5-d1e708f0faf1",
+              "leftValue": "= {{ $json.score }}",
+              "rightValue": 70,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        720,
+        -144
+      ],
+      "id": "e094cf73-b94e-4659-a396-5a613ab25415",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c68e7d11-0c51-409f-9a82-05741e044a1f",
+              "name": "priority",
+              "value": "Hot - respond within 1 hour",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        896,
+        -272
+      ],
+      "id": "fe3745fe-48ff-4825-b8fb-b216ebd4e25e",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c1c89f81-ffdb-4a71-9a6f-66eb13efccb5",
+              "name": "priority",
+              "value": "Standard - respond within 24 hours",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        944,
+        -48
+      ],
+      "id": "61440559-91a8-4f56-bb6b-2a35ada3b38c",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "assignedRep": "={{ $json.repName }}",
+            "status": "Assigned",
+            "priority": "={{ $json.priority }}",
+            "leadID": "={{ $json.leadID }}"
+          },
+          "matchingColumns": [
+            "leadID"
+          ],
+          "schema": [
+            {
+              "id": "leadID",
+              "displayName": "leadID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phone",
+              "displayName": "phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "company",
+              "displayName": "company",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "source",
+              "displayName": "source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "message",
+              "displayName": "message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "dateCreated",
+              "displayName": "dateCreated",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "assignedRep",
+              "displayName": "assignedRep",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1120,
+        -272
+      ],
+      "id": "36912216-b79c-4383-a27b-2563cf2a87cb",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6HvNQogqPaZpRFlt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "793fc563-7bd3-474b-8e67-140ebb835c77",
+              "name": "=newActiveCount",
+              "value": "={{ $('Merge').item.json.activeLeadCount + 1 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        1344,
+        -272
+      ],
+      "id": "4f8b3025-d437-4156-bcca-6fb7aac16519",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 183260080,
+          "mode": "list",
+          "cachedResultName": "Reps",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit#gid=183260080"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "repID": "={{ $('Merge').item.json.repID }}",
+            "activeLeadCount": "={{ $('Edit Fields3').item.json.newActiveCount }}"
+          },
+          "matchingColumns": [
+            "repID"
+          ],
+          "schema": [
+            {
+              "id": "repID",
+              "displayName": "repID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "region",
+              "displayName": "region",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "product",
+              "displayName": "product",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "activeLeadCount",
+              "displayName": "activeLeadCount",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1248,
+        64
+      ],
+      "id": "8f6a7e72-0d98-4a16-a017-31bf8326713d",
+      "name": "Reps Update",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6HvNQogqPaZpRFlt",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 541838469,
+          "mode": "list",
+          "cachedResultName": "Notifications",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1gvQBdKSBkPs-gI5rSpqN6gKxmkZL2Jkp-0ahCe93Mz8/edit#gid=541838469"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "timestamp": "={{ $now }}",
+            "to": "={{ $('Merge').item.json.repEmail }}",
+            "subject": "={{ \"New Lead Assigned: \" + $('Merge').item.json.name }}",
+            "body": "={{ \"Lead \" + $('Merge').item.json.name + \" from \" + $('Merge').item.json.company + \" scored \" + $('Merge').item.json.score + \". Priority: \" + $('Edit Fields1').item.json.priority }}",
+            "leadID": "={{ $('Merge').item.json.leadID }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "timestamp",
+              "displayName": "timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "to",
+              "displayName": "to",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "subject",
+              "displayName": "subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "body",
+              "displayName": "body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "leadID",
+              "displayName": "leadID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1472,
+        64
+      ],
+      "id": "36250bda-ac00-4030-a148-2e1637bba088",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "6HvNQogqPaZpRFlt",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "When Executed by Another Workflow": [
+      {
+        "json": {
+          "leadID": "L3"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "Get Lead Details",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get Reps",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Lead Details": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sort": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Reps": {
+      "main": [
+        [
+          {
+            "node": "Sort",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Reps Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reps Update": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "errorWorkflow": "17YmNqqAln7MfBse",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "7fa78d8b-f62d-43dd-a13f-1fab630975e9",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "24149cdefd67685df02d725928fce06a55f9f7c454685d35b0f8fe9a087d3acd"
+  },
+  "nodeGroups": [],
+  "id": "TmzH3UMU7WcwwJjU",
+  "tags": []
+}
