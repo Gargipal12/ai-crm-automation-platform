@@ -53,3 +53,51 @@ ai-crm-automation-platform/
 │   └── AI_CRM_Automation_Platform.key
 │
 └── README.md
+
+## Key Design Decisions
+
+- **Google Gemini instead of OpenAI** — OpenAI's free-tier credits are no longer available; Gemini's free tier requires no payment method and integrates natively with n8n's AI nodes.
+- **Simulated notifications instead of live Gmail/Calendar sending** — rather than granting a personal Google account real send access for a class project, WF3 and WF4 log every notification (recipient, subject, body, timestamp) to a `Notifications` sheet tab. A standard "dry-run" pattern, swappable for a live transactional email API without changing any upstream workflow logic.
+- **Self-hosted via Docker** rather than a time-limited cloud trial, for full control across the build.
+- **Workload-based rep assignment** — reps are sorted by live `activeLeadCount` and assigned to the least-busy one, rather than a fixed round-robin rotation.
+
+Full reasoning, a complete node-by-node breakdown, and lessons learned from debugging are in the project documentation in the `docs/` directory.
+
+## Advanced Features Implemented
+
+- AI-powered decision making (WF2, Gemini-based scoring)
+- Conditional branching (WF3, Hot vs. Standard priority)
+- Loops (WF4, Split in Batches over stale leads)
+- Scheduled / cron-triggered workflow (WF4)
+- Webhook-triggered workflow (WF1)
+- Sub-workflow orchestration (WF1 → WF2)
+- Error handling & retry logic (WF6, registered as Error Workflow on WF1–WF4)
+- Logging & audit trail (`ErrorLog` and `Notifications` sheet tabs)
+- Human approval step — scoped as future work (see documentation)
+
+## Running This Project
+
+1. Self-host n8n via Docker:
+
+   ```bash
+   docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n docker.n8n.io/n8nio/n8n
+2. Create a Google Sheet with tabs `Leads`, `Reps`, `Proposals`, `Notifications`, `ErrorLog`.
+
+3. In n8n, import each JSON file from `workflows/`:
+   `Workflows → Add workflow → Import from File`
+
+4. Connect a Google Sheets OAuth2 credential and a Google Gemini (AI Studio) API credential.
+
+5. Publish WF1, WF2, WF3, WF4, and WF6. Set WF6 as the **Error Workflow** in the Settings of WF1–WF4.
+
+6. Send a test lead to WF1's webhook:
+
+   ```bash
+   curl -X POST <your-n8n-webhook-url> \
+     -H "Content-Type: application/json" \
+     -d '{"name": "Test Lead", "email": "test@example.com", "phone": "9999999999", "company": "Test Co", "source": "Website", "message": "Interested, budget approved, need this urgently"}'
+## Author
+
+Gargi Pal
+
+GitHub: https://github.com/Gargipal12
