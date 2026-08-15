@@ -7,8 +7,7 @@ An AI-powered CRM and sales automation platform that captures leads from a webho
 ## Architecture
 
 Five independent, interconnected workflows share a single Google Sheets document as the CRM data store. WF1 and WF2 chain directly as sub-workflow calls; WF4 and WF6 run on their own triggers, reading and writing the same shared data — loosely coupled so any one workflow can change without breaking the rest.
-
-f
+![AI CRM Automation Platform Architecture](Screenshots/Architecture.png)
 
 ## Workflows
 
