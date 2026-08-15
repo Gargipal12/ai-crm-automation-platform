@@ -61,7 +61,7 @@ ai-crm-automation-platform/
 - **Self-hosted via Docker** rather than a time-limited cloud trial, for full control across the build.
 - **Workload-based rep assignment** — reps are sorted by live `activeLeadCount` and assigned to the least-busy one, rather than a fixed round-robin rotation.
 
-Full reasoning, a complete node-by-node breakdown, and lessons learned from debugging are in the project documentation in the `docs/` directory.
+Full reasoning, a complete node-by-node breakdown, and lessons learned from debugging are in [AI CRM Automation Platform Documentation](docs/AI_CRM_Automation_Platform_Documentation%20%281%29.docx).
 
 ## Advanced Features Implemented
 
