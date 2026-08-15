@@ -54,6 +54,7 @@ ai-crm-automation-platform/
 │
 └── README.md
 
+``` 
 ## Key Design Decisions
 
 - **Google Gemini instead of OpenAI** — OpenAI's free-tier credits are no longer available; Gemini's free tier requires no payment method and integrates natively with n8n's AI nodes.
